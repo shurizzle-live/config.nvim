@@ -287,6 +287,13 @@ require('packer').startup(function(use)
   }
 
   use { 'tpope/vim-repeat' }
+
+  use {
+    'kylechui/nvim-surround',
+    config = function()
+      require 'config.plugins.surround'
+    end,
+  }
 end)
 
 if vim.g.packer_bootstrap then

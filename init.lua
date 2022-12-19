@@ -285,6 +285,8 @@ require('packer').startup(function(use)
       require('nvim-autopairs').setup {}
     end,
   }
+
+  use { 'tpope/vim-repeat' }
 end)
 
 if vim.g.packer_bootstrap then

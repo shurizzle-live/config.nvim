@@ -1,5 +1,5 @@
 -- Just use vim.
-for name, key in pairs({
+for name, key in pairs {
   'Left',
   'Right',
   'Up',
@@ -9,33 +9,19 @@ for name, key in pairs({
   'End',
   'Home',
   Delete = 'Del',
-}) do
-  if type(name) == 'number' then name = key end
+} do
+  if type(name) == 'number' then
+    name = key
+  end
 
   local keymap = function(modes, left, right, options)
-    options =
-    vim.tbl_extend('force', { noremap = true, silent = true }, options or {})
+    options = vim.tbl_extend('force', { noremap = true, silent = true }, options or {})
     vim.keymap.set(modes, left, right, options)
   end
 
-  keymap(
-    'n',
-    '<' .. key .. '>',
-    '<cmd>echo "No ' .. name .. ' for you!"<CR>',
-    { noremap = false }
-  )
-  keymap(
-    'v',
-    '<' .. key .. '>',
-    '<cmd><C-u>echo "No ' .. name .. ' for you!"<CR>',
-    { noremap = false }
-  )
-  keymap(
-    'i',
-    '<' .. key .. '>',
-    '<C-o><cmd>echo "No ' .. name .. ' for you!"<CR>',
-    { noremap = false }
-  )
+  keymap('n', '<' .. key .. '>', '<cmd>echo "No ' .. name .. ' for you!"<CR>', { noremap = false })
+  keymap('v', '<' .. key .. '>', '<cmd><C-u>echo "No ' .. name .. ' for you!"<CR>', { noremap = false })
+  keymap('i', '<' .. key .. '>', '<C-o><cmd>echo "No ' .. name .. ' for you!"<CR>', { noremap = false })
 end
 
 vim.g.mapleader = ','
@@ -70,66 +56,77 @@ vim.o.listchars = 'tab: ·,trail:×,nbsp:%,eol:·,extends:»,precedes:«'
 vim.cmd [[colo slate]]
 
 local function git_clone(url, dir, callback)
-  local install_path = vim.fn.stdpath('data') .. '/site/pack/packer/start/' .. dir
+  local install_path = vim.fn.stdpath 'data' .. '/site/pack/packer/start/' .. dir
 
   if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-    vim.fn.system({
+    vim.fn.system {
       'git',
       'clone',
       '--depth',
       '1',
       url,
       install_path,
-    })
+    }
     callback(vim.v.shell_error)
   end
 end
 
-git_clone(
-  'https://github.com/lewis6991/impatient.nvim',
-  'impatient.nvim',
-  function(res)
-    if res == 0 then vim.cmd([[packadd impatient.nvim]]) end
+git_clone('https://github.com/lewis6991/impatient.nvim', 'impatient.nvim', function(res)
+  if res == 0 then
+    vim.cmd [[packadd impatient.nvim]]
   end
-)
+end)
 
-xpcall(
-  function() require('impatient') end,
-  function(_)
-    vim.api.nvim_echo(
-      { { 'Error while loading impatient', 'ErrorMsg' } },
-      true,
-      {}
-    )
-  end
-)
+xpcall(function()
+  require 'impatient'
+end, function(_)
+  vim.api.nvim_echo({ { 'Error while loading impatient', 'ErrorMsg' } }, true, {})
+end)
 
-git_clone(
-  'https://github.com/wbthomason/packer.nvim',
-  'packer.nvim',
-  function(res)
-    if res == 0 then
-      vim.g.packer_bootstrap = true
-      vim.cmd([[packadd packer.nvim]])
-    end
+git_clone('https://github.com/wbthomason/packer.nvim', 'packer.nvim', function(res)
+  if res == 0 then
+    vim.g.packer_bootstrap = true
+    vim.cmd [[packadd packer.nvim]]
   end
-)
+end)
 
 require('packer').startup(function(use)
   use 'lewis6991/impatient.nvim'
   use 'wbthomason/packer.nvim'
   use 'nvim-lua/plenary.nvim'
-  use { 'nvim-treesitter/nvim-treesitter',
-    config = function() require 'config.plugins.treesitter' end,
-    run = function() require('nvim-treesitter.install').update({ with_sync = true }) end }
-  use { 'nvim-treesitter/nvim-treesitter-textobjects',
-    config = function() require 'config.plugins.treesitter-textobjects' end }
-  use { 'williamboman/mason.nvim',
-    config = function() require 'config.plugins.mason' end }
-  use { 'williamboman/mason-lspconfig.nvim',
-    config = function() require("mason-lspconfig").setup({ automatic_installation = true }) end }
-  use { 'neovim/nvim-lspconfig',
-    config = function() require 'config.plugins.lspconfig' end }
+  use {
+    'nvim-treesitter/nvim-treesitter',
+    config = function()
+      require 'config.plugins.treesitter'
+    end,
+    run = function()
+      require('nvim-treesitter.install').update { with_sync = true }
+    end,
+  }
+  use {
+    'nvim-treesitter/nvim-treesitter-textobjects',
+    config = function()
+      require 'config.plugins.treesitter-textobjects'
+    end,
+  }
+  use {
+    'williamboman/mason.nvim',
+    config = function()
+      require 'config.plugins.mason'
+    end,
+  }
+  use {
+    'williamboman/mason-lspconfig.nvim',
+    config = function()
+      require('mason-lspconfig').setup { automatic_installation = true }
+    end,
+  }
+  use {
+    'neovim/nvim-lspconfig',
+    config = function()
+      require 'config.plugins.lspconfig'
+    end,
+  }
 
   use 'L3MON4D3/LuaSnip'
 
@@ -137,16 +134,33 @@ require('packer').startup(function(use)
   use 'hrsh7th/cmp-nvim-lsp'
   use 'hrsh7th/cmp-buffer'
   use 'hrsh7th/cmp-path'
-  use { 'hrsh7th/nvim-cmp',
-    config = function() require 'config.plugins.cmp' end }
+  use {
+    'hrsh7th/nvim-cmp',
+    config = function()
+      require 'config.plugins.cmp'
+    end,
+  }
 
-  use { 'numToStr/Comment.nvim',
-    config = function() require 'config.plugins.comment' end }
+  use {
+    'numToStr/Comment.nvim',
+    config = function()
+      require 'config.plugins.comment'
+    end,
+  }
 
-  use { 'jose-elias-alvarez/null-ls.nvim',
-    config = function() require 'config.plugins.null-ls' end }
+  use {
+    'jose-elias-alvarez/null-ls.nvim',
+    config = function()
+      require 'config.plugins.null-ls'
+    end,
+  }
 
-  use { 'folke/neodev.nvim', config = function() require('neodev').setup({}) end }
+  use {
+    'folke/neodev.nvim',
+    config = function()
+      require('neodev').setup {}
+    end,
+  }
 end)
 
 if vim.g.packer_bootstrap then

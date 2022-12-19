@@ -9,14 +9,14 @@ local function on_attach()
   vim.api.nvim_create_autocmd({ 'BufWritepre' }, {
     pattern = { '*' },
     callback = function()
-      vim.lsp.buf.format({ async = false })
+      vim.lsp.buf.format { async = false }
     end,
-  });
+  })
 end
 
-require 'lspconfig'.pyright.setup({
-  on_attach = on_attach
-})
-require 'lspconfig'.sumneko_lua.setup({
-  on_attach = on_attach
-})
+require('lspconfig').pyright.setup {
+  on_attach = on_attach,
+}
+require('lspconfig').sumneko_lua.setup {
+  on_attach = on_attach,
+}

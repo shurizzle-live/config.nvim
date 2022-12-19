@@ -52,8 +52,7 @@ vim.o.ignorecase = true
 -- vim.o.smartcase = true
 vim.o.list = true
 vim.o.listchars = 'tab: ·,trail:×,nbsp:%,eol:·,extends:»,precedes:«'
-
-vim.cmd [[colo slate]]
+vim.o.termguicolors = true
 
 vim.keymap.set('n', '<C-n>', '<cmd>bnext<cr>')
 vim.keymap.set('n', '<C-p>', '<cmd>bprevious<cr>')
@@ -93,10 +92,27 @@ git_clone('https://github.com/wbthomason/packer.nvim', 'packer.nvim', function(r
   end
 end)
 
+require('packer').init {
+  display = {
+    open_fn = function()
+      return require('packer.util').float { border = 'rounded' }
+    end,
+  },
+}
+
 require('packer').startup(function(use)
   use 'lewis6991/impatient.nvim'
   use 'wbthomason/packer.nvim'
   use 'nvim-lua/plenary.nvim'
+  use 'kyazdani42/nvim-web-devicons'
+
+  use {
+    'andersevenrud/nordic.nvim',
+    config = function()
+      require('nordic').colorscheme {}
+    end,
+  }
+
   use {
     'stevearc/dressing.nvim',
     config = function()
@@ -137,6 +153,7 @@ require('packer').startup(function(use)
       require('mason-lspconfig').setup { automatic_installation = true }
     end,
   }
+  use { 'ray-x/lsp_signature.nvim' }
   use {
     'neovim/nvim-lspconfig',
     config = function()
@@ -187,6 +204,67 @@ require('packer').startup(function(use)
     'nvim-telescope/telescope.nvim',
     config = function()
       require 'config.plugins.telescope'
+    end,
+  }
+
+  use {
+    'folke/which-key.nvim',
+    config = function()
+      require('which-key').setup {}
+    end,
+  }
+
+  use {
+    'nvim-lualine/lualine.nvim',
+    config = function()
+      require 'config.plugins.lualine'
+    end,
+  }
+
+  use {
+    'lewis6991/gitsigns.nvim',
+    config = function()
+      require('gitsigns').setup {}
+    end,
+  }
+
+  use {
+    'rcarriga/nvim-notify',
+    config = function()
+      local notify = require 'notify'
+      notify.setup {}
+      vim.notify = notify
+    end,
+  }
+
+  use {
+    'lukas-reineke/indent-blankline.nvim',
+    config = function()
+      require('indent_blankline').setup {
+        show_current_context = true,
+        show_current_context_start = true,
+        filetype_exclude = {
+          'alpha',
+          'dashboard',
+          'NvimTree',
+          'help',
+          'packer',
+          'lsp-installer',
+          'rfc',
+          'DressingInput',
+          'mason',
+        },
+        buftype_exclude = {
+          'terminal',
+        },
+      }
+    end,
+  }
+
+  use {
+    'j-hui/fidget.nvim',
+    config = function()
+      require('fidget').setup {}
     end,
   }
 end)

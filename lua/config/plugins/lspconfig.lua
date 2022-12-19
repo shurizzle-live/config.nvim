@@ -1,50 +1,7 @@
 local lsp = require 'lspconfig'
 local lsputil = require 'lspconfig.util'
 
-lsputil.on_setup = lsputil.add_hook_before(lsputil.on_setup, function(cfg)
-  cfg.cababilities = vim.tbl_deep_extend('force', require('cmp_nvim_lsp').default_capabilities(), cfg.capabilities or {})
-end)
-
-local signs = {
-  { name = 'DiagnosticSignError', text = '' },
-  { name = 'DiagnosticSignWarn', text = '' },
-  { name = 'DiagnosticSignHint', text = '' },
-  { name = 'DiagnosticSignInfo', text = '' },
-}
-
-for _, sign in ipairs(signs) do
-  vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = '' })
-end
-
-local diag_config = {
-  virtual_text = false,
-  signs = {
-    active = signs,
-  },
-  update_in_insert = true,
-  underline = true,
-  severity_sort = true,
-  float = {
-    focusable = false,
-    style = 'minimal',
-    border = 'rounded',
-    source = 'always',
-    header = '',
-    prefix = '',
-  },
-}
-
-vim.diagnostic.config(diag_config)
-
-vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
-  border = 'rounded',
-})
-
-vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, {
-  border = 'rounded',
-})
-
-local function on_attach()
+local function on_attach(client, bufnr)
   vim.api.nvim_create_autocmd({ 'BufWritepre' }, {
     pattern = { '*' },
     callback = function()
@@ -96,12 +53,58 @@ local function on_attach()
   vim.keymap.set('n', '<leader>cR', function()
     vim.lsp.buf.references {}
   end, vim.tbl_deep_extend('force', options, { desc = 'Show under-cursor references' }))
+
+  require('lsp_signature').on_attach({
+    floating_window_above_cur_line = true,
+    floating_window = true,
+    transparency = 10,
+  }, bufnr)
 end
 
-lsp.pyright.setup {
-  on_attach = on_attach,
+lsputil.on_setup = lsputil.add_hook_before(lsputil.on_setup, function(cfg)
+  cfg.cababilities = vim.tbl_deep_extend('force', require('cmp_nvim_lsp').default_capabilities(), cfg.capabilities or {})
+  cfg.on_attach = lsputil.add_hook_before(cfg.on_attach, on_attach)
+end)
+
+local signs = {
+  { name = 'DiagnosticSignError', text = '' },
+  { name = 'DiagnosticSignWarn', text = '' },
+  { name = 'DiagnosticSignHint', text = '' },
+  { name = 'DiagnosticSignInfo', text = '' },
 }
 
-lsp.sumneko_lua.setup {
-  on_attach = on_attach,
+for _, sign in ipairs(signs) do
+  vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = '' })
+end
+
+local diag_config = {
+  virtual_text = false,
+  signs = {
+    active = signs,
+  },
+  update_in_insert = true,
+  underline = true,
+  severity_sort = true,
+  float = {
+    focusable = false,
+    style = 'minimal',
+    border = 'rounded',
+    source = 'always',
+    header = '',
+    prefix = '',
+  },
 }
+
+vim.diagnostic.config(diag_config)
+
+vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
+  border = 'rounded',
+})
+
+vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, {
+  border = 'rounded',
+})
+
+lsp.pyright.setup {}
+
+lsp.sumneko_lua.setup {}

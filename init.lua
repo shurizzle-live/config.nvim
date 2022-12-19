@@ -55,6 +55,9 @@ vim.o.listchars = 'tab: ·,trail:×,nbsp:%,eol:·,extends:»,precedes:«'
 
 vim.cmd [[colo slate]]
 
+vim.keymap.set('n', '<C-n>', '<cmd>bnext<cr>')
+vim.keymap.set('n', '<C-p>', '<cmd>bprevious<cr>')
+
 local function git_clone(url, dir, callback)
   local install_path = vim.fn.stdpath 'data' .. '/site/pack/packer/start/' .. dir
 
@@ -94,6 +97,19 @@ require('packer').startup(function(use)
   use 'lewis6991/impatient.nvim'
   use 'wbthomason/packer.nvim'
   use 'nvim-lua/plenary.nvim'
+  use {
+    'stevearc/dressing.nvim',
+    config = function()
+      require('dressing').setup {
+        input = {
+          insert_only = false,
+          win_options = {
+            winblend = 20,
+          },
+        },
+      }
+    end,
+  }
   use {
     'nvim-treesitter/nvim-treesitter',
     config = function()
@@ -159,6 +175,18 @@ require('packer').startup(function(use)
     'folke/neodev.nvim',
     config = function()
       require('neodev').setup {}
+    end,
+  }
+
+  use { 'nvim-telescope/telescope-ui-select.nvim' }
+  use {
+    'nvim-telescope/telescope-fzf-native.nvim',
+    run = 'make',
+  }
+  use {
+    'nvim-telescope/telescope.nvim',
+    config = function()
+      require 'config.plugins.telescope'
     end,
   }
 end)

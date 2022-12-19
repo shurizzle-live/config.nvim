@@ -128,7 +128,6 @@ require('packer').startup(function(use)
     config = function() require 'config.plugins.mason' end }
   use { 'williamboman/mason-lspconfig.nvim',
     config = function() require("mason-lspconfig").setup({ automatic_installation = true }) end }
-  use { 'folke/neodev.nvim', config = function() require('neodev').setup({}) end }
   use { 'neovim/nvim-lspconfig',
     config = function() require 'config.plugins.lspconfig' end }
 
@@ -146,6 +145,8 @@ require('packer').startup(function(use)
 
   use { 'jose-elias-alvarez/null-ls.nvim',
     config = function() require 'config.plugins.null-ls' end }
+
+  use { 'folke/neodev.nvim', config = function() require('neodev').setup({}) end }
 end)
 
 if vim.g.packer_bootstrap then

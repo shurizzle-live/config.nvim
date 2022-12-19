@@ -56,6 +56,10 @@ vim.o.termguicolors = true
 
 vim.keymap.set('n', '<C-n>', '<cmd>bnext<cr>')
 vim.keymap.set('n', '<C-p>', '<cmd>bprevious<cr>')
+vim.keymap.set('n', '<C-h>', '<cmd>wincmd h<cr>')
+vim.keymap.set('n', '<C-j>', '<cmd>wincmd j<cr>')
+vim.keymap.set('n', '<C-k>', '<cmd>wincmd k<cr>')
+vim.keymap.set('n', '<C-l>', '<cmd>wincmd l<cr>')
 
 local function git_clone(url, dir, callback)
   local install_path = vim.fn.stdpath 'data' .. '/site/pack/packer/start/' .. dir

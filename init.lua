@@ -274,6 +274,13 @@ require('packer').startup(function(use)
       require 'config.plugins.barbar'
     end,
   }
+
+  use {
+    'windwp/nvim-autopairs',
+    config = function()
+      require('nvim-autopairs').setup {}
+    end,
+  }
 end)
 
 if vim.g.packer_bootstrap then

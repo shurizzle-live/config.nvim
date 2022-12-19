@@ -267,6 +267,13 @@ require('packer').startup(function(use)
       require('fidget').setup {}
     end,
   }
+
+  use {
+    'romgrk/barbar.nvim',
+    config = function()
+      require 'config.plugins.barbar'
+    end,
+  }
 end)
 
 if vim.g.packer_bootstrap then
